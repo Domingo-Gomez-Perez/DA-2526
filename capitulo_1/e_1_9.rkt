@@ -1,0 +1,48 @@
+#lang racket
+
+(define (inc x) (+ x 1))  ; incrementa en 1
+(define (dec x) (- x 1))  ; decrementa en 1
+
+;; Versión 1: proceso RECURSIVO 
+(define (plus-rec a b)
+  (if (= a 0)
+      b
+      (inc (plus-rec (dec a) b))))
+
+;; Modelo de sustitución para (plus-rec 4 5):
+;;
+;; (plus-rec 4 5)
+;; → (inc (plus-rec 3 5))                     ; queda pendiente aplicar (inc ...)
+;; → (inc (inc (plus-rec 2 5)))               ; se acumula otro inc pendiente
+;; → (inc (inc (inc (plus-rec 1 5))))
+;; → (inc (inc (inc (inc (plus-rec 0 5)))))
+;; → (inc (inc (inc (inc 5))))                ; base alcanzada, ahora se “desenrolla”
+;; → (inc (inc (inc 6)))
+;; → (inc (inc 7))
+;; → (inc 8)
+;; → 9
+;;
+;; Se acumulan aplicaciones pendientes de inc.
+;; Esto es un PROCESO RECURSIVO (usa crecimiento de pila).
+
+;; Versión 2: proceso ITERATIVO (sin trabajo pendiente)
+(define (plus-iter a b)
+  (if (= a 0)
+      b
+      (plus-iter (dec a) (inc b))))
+
+;; Modelo de sustitución para (plus-iter 4 5):
+;;
+;; (plus-iter 4 5)
+;; → (plus-iter 3 6)
+;; → (plus-iter 2 7)
+;; → (plus-iter 1 8)
+;; → (plus-iter 0 9)
+;; → 9
+;;
+;; No hay operaciones pendientes; el “estado” (a, b) se actualiza en cada paso.
+;; Esto es un PROCESO ITERATIVO (constante en espacio, estilo tail-recursive).
+
+;; Ejemplos:
+(plus-rec 4 5)   ; => 9  (recursivo)
+(plus-iter 4 5)  ; => 9  (iterativo)

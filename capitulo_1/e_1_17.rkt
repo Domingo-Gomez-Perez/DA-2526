@@ -1,0 +1,16 @@
+#lang racket
+;; Ej. 1.17 — multiplicación en O(log b) (análogo a fast-expt)
+
+(define (double x) (+ x x))          ; duplica x
+(define (halve x)  (quotient x 2))   ; divide x entre 2, parte entera
+;; even? → #t si el número es par, #f si no
+
+;; Versión recursiva (log pasos):
+(define (mul-fast a b)
+  (cond [(= b 0) 0]
+        [(even? b) (mul-fast (double a) (halve b))]
+        [else (+ a (mul-fast a (- b 1)))]))
+
+;; Pruebas
+(mul-fast  13 11)      ; => 143
+(mul-fast  7  32)      ; => 224

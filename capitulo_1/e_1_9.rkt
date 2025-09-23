@@ -1,19 +1,19 @@
 #lang racket
 
-; Each of the following two procedures defines a
-; method for adding two positive integers in terms of the procedures
-; `inc`, which increments its argument by 1, and `dec`, which decrements
-; its argument by 1.
+;Each of the following two procedures defines a
+;method for adding two positive integers in terms of the procedures
+;`inc`, which increments its argument by 1, and `dec`, which decrements
+;its argument by 1.
 (define (inc x) (+ x 1))
 (define (dec x) (- x 1))
 
-; Este es el procedimiento RECURSIVO de suma
+;RECURSIVE PROCEDURE
 (define (plus-rec a b)
   (if (= a 0) 
       b 
       (inc (plus-rec (dec a) b))))
 
-; Este es el procedimiento ITERATIVO de suma
+;ITERATIVE PROCEDURE
 (define (plus-iter a b)
   (if (= a 0) 
       b 
@@ -23,26 +23,29 @@
 ;procedure in evaluating `(plus 4 5)`.  Are these processes iterative or
 ;recursive?
 
-; El primer procedimiento, tal y como he puesto en el comentario es recursivo
-; Esto se debe a que hay que guardar en el stack las llamadas que se realizan
-; porque hay que realizar operaciones con cada llamada siguiente, es decir,
-; hay que volver hacia atrás en las llamadas para llegar al resultado final.
+;ANSWER
 
-; Con este procedimiento, (plus 4 5) sería:
-; (+ (plus(3 5) 1)
-; (+ (plus(2 5) 1 1)
-; (+ (plus 1 5) 1 1 1)
-; (+ (plus 0 5) 1 1 1 1)
-; (+ 5 1 1 1 1) = 9
+;The first procedure is recursive, this is because we have to use the stack
+;to save the calls made, because we need to operate with the value with the
+;next call. We have to go back in every call to get to the final result
 
+;With this procedure (plus-rec 4 5) would be:
+;(plus-rec 4 5)
+;→ (inc (plus-rec 3 5))
+;→ (inc (inc (plus-rec 2 5)))
+;→ (inc (inc (inc (plus-rec 1 5))))
+;→ (inc (inc (inc (inc (plus-rec 0 5)))))
+;→ (inc (inc (inc (inc 5))))
+;→ 9
 
-; El segundo procedimiento, tal y como he puesto en el comentario es iterativo.
-; Esto se debe a que no hay que hacer operaciones con las llamadas al procedimiento
-; que se van realizando, no hay que guardar las llamadas, simplemente se sustituyen
-; por otras que dan el resultado adecuado.
+;The second procedure is iterative. Each call is substituted by a different call, but
+;no calls have to be saved in the stack, there is simply a substitution, no operations
+;are done that involved resolving a previous call.
 
-; Con este procedimiento, (plus 4 5) sería:
-; (plus 3 6)
-; (plus 2 7)
-; (plus 1 8)
-; (plus 0 9) = 9 
+;With this procedure (plus-iter 4 5) would be
+;(plus-iter 4 5)
+;→ (plus-iter 3 6)
+;→ (plus-iter 2 7)
+;→ (plus-iter 1 8)
+;→ (plus-iter 0 9)
+;→ 9

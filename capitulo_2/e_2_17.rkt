@@ -1,8 +1,8 @@
 #lang racket
 ; Procedimiento para devolver la lista (NO VACÍA) solo con el último elemento
-(define (last-element lst)
-  (if (null? (cdr lst))
-      (car lst)
-      (last-element (cdr lst))))
+(define (last-element list)
+  (if (null? (cdr list))
+      (car list)
+      (last-element (cdr list))))
   
   

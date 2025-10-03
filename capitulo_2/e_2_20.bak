@@ -1,0 +1,20 @@
+#lang racket
+
+;; Procedimiento same-parity:
+;; recibe al menos un número (x) y una lista de más números (resto).
+;; Devuelve una lista con todos los números que tienen la misma paridad que x.
+
+(define (same-parity x . rest)
+  ;; función auxiliar para comprobar si dos números tienen la misma paridad
+  (define (same? a b)
+    (= (remainder a 2) (remainder b 2)))
+
+  ;; filtramos los elementos de 'rest' que cumplen la paridad de x
+  (define (filter-same lst)
+    (cond ((null? lst) '())                          ; caso base: lista vacía
+          ((same? x (car lst))                       ; si tienen misma paridad
+           (cons (car lst) (filter-same (cdr lst)))) ; lo añadimos al resultado
+          (else (filter-same (cdr lst))))))          ; si no, lo descartamos
+
+  ;; el resultado siempre empieza con x, seguido de los filtrados
+  (cons x (filter-same rest)))

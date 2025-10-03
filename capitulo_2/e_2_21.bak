@@ -1,0 +1,12 @@
+#lang racket
+
+;; Definición recursiva
+(define (square-list items)
+  (if (null? items)
+      '()                                     ; lista vacía si no hay elementos
+      (cons (* (car items) (car items))       ; cuadrado del primer elemento
+            (square-list (cdr items)))))      ; recursión con el resto
+
+;; Definición usando map
+(define (square-list items)
+  (map (lambda (x) (* x x)) items))           ; aplica el cuadrado a cada elemento

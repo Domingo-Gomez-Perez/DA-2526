@@ -1,12 +1,11 @@
 #lang racket
 
-; Eva's new-if definition
 (define (new-if predicate then-clause else-clause)
   (cond (predicate then-clause)
         (else else-clause)))
 
- (new-if (= 2 3) 0 5)   ; → should return 5
- (new-if (= 1 1) 0 5)   ; → should return 0
+(new-if (= 2 3) 0 5) ; Retorna 5
+(new-if (= 1 1) 0 5) ; Retorna 0
 
 (define (square x) (* x x))
 
@@ -19,30 +18,25 @@
 (define (good-enough? guess x)
   (< (abs (- (square guess) x)) 0.001))
 
-; Original sqrt-iter with special form 'if' (this works)
+; Version original con el if normal
 (define (sqrt-iter-original guess x)
   (if (good-enough? guess x)
       guess
       (sqrt-iter-original (improve guess x) x)))
 
-; Alyssa's version using new-if 
+; Version con el new-if
 (define (sqrt-iter-new-if guess x)
   (new-if (good-enough? guess x)
           guess
           (sqrt-iter-new-if (improve guess x) x)))
 
-;; Wrapper function to catch the infinite recursion
-(define (safe-sqrt-iter-new-if guess x)
-  (with-handlers ([exn:fail? (lambda (exn) 'infinite-recursion)])
-    (sqrt-iter-new-if guess x)))
+(sqrt-iter-original 1.0 2) ; Realiza la aproximación correctamente
+;(safe-sqrt-iter-new-if 1.0 2) ; Si se ejecuta esto el programa no termina, se queda en un bucle infinito.
 
-;; Let's test both versions
-(sqrt-iter-original 1.0 2)        ; → works, returns approx sqrt(2)
-(safe-sqrt-iter-new-if 1.0 2)     ; → infinite recursion (caught)
-
-; Explanation:
-; The original 'if' is a special form that only evaluates
-; the branch that is needed based on the predicate.
-; But 'new-if' is a procedure, so all arguments are evaluated
-; before the procedure is called, including the recursive call.
-; This causes infinite recursion because the base case is never reached.
+; El motivo por el que se queda en un bucle infinito es porque new-if se trata de un procedimiento
+; que en racket emplea applicative-order, es decir, todos los argumentos de la función se evalúan antes de
+; aplicar la función. Esto resulta en que el algoritmo intenta constantemente mejorar el resultado ejecutando
+; (sqrt-iter-new-if (improve guess x) x)) cuando en realidad ya se tiene un resultado suficientemente bueno como
+; para que la condición (good-enough? guess x) se cumpla, y nunca retorna el guess.
+; Con el if es distinto, pues emplea normal-order y por lo tanto en cuanto se cumple la condición (good-enough? guess x)
+; directamente retorna la aproximación sin tener que evaluar (sqrt-iter-new-if (improve guess x) x))).

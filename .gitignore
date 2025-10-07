@@ -1,8 +1,9 @@
 *.ss~
 *.ss#*
 .#*.ss
-
+*.org*
 *.scm~
 *.scm#*
 .#*.scm
+*.bak
 *~

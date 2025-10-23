@@ -1,5 +1,5 @@
 # Diseño de Algoritmos con SICP 
-
+javier
 "Este libro está dedicado, con respeto y admiración, al espíritu que
 vive en la computadora."
 

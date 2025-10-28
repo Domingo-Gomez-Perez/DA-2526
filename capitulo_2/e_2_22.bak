@@ -1,0 +1,63 @@
+#lang racket
+
+;; Ejercicio 2.22 - SICP
+;; Louis Reasoner intenta escribir square-list de forma iterativa.
+;; Pregunta 1: ¿Por qué la primera versión devuelve la lista al revés?
+;;
+;; Respuesta:
+;; Porque en cada paso usa (cons (sqr (car things)) answer).
+;; Esto coloca el nuevo elemento cuadrado al frente de la lista acumulada.
+;; Así, el primer elemento de la lista original termina siendo el último
+;; en el resultado, y la lista queda en orden inverso.
+
+(define (square-list-reverse items)
+  (define (iter things answer)
+    (if (null? things)
+        answer
+        (iter (cdr things)
+              (cons (sqr (car things)) answer))))
+  (iter items '()))
+
+;; Pregunta 2: Louis intenta arreglarlo intercambiando los argumentos de cons.
+;; ¿Por qué esto tampoco funciona?
+;;
+;; Respuesta:
+;; (cons) siempre toma como primer argumento un elemento
+;; y como segundo argumento una lista.
+;; Louis escribió (cons answer (sqr (car things))),
+;; pero aquí "answer" es una lista, no un solo elemento.
+;; Esto construye listas anidadas mal formadas como:
+;; '((((() . 1) . 4) . 9) . 16)
+;; en lugar de una lista plana de cuadrados.
+
+(define (square-list-bad items)
+  (define (iter things answer)
+    (if (null? things)
+        answer
+        (iter (cdr things)
+              (cons answer (sqr (car things))))))
+  (iter items '()))
+
+;; Versión correcta iterativa usando append.
+;; Aquí el acumulador crece en el orden correcto
+;; porque se añade al final en cada paso.
+;;
+;; Nota: append es menos eficiente que cons, pero conserva el orden.
+
+(define (square-list items)
+  (define (iter things answer)
+    (if (null? things)
+        answer
+        (iter (cdr things)
+              (append answer (list (sqr (car things)))))))
+  (iter items '()))
+
+;; Pruebas
+(square-list-reverse (list 1 2 3 4))
+; => '(16 9 4 1)
+
+(square-list-bad (list 1 2 3 4))
+; => '((((() . 1) . 4) . 9) . 16)   ; lista mal formada
+
+(square-list (list 1 2 3 4))
+; => '(1 4 9 16)   ; versión correcta

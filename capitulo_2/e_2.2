@@ -1,0 +1,59 @@
+#lang racket
+
+
+;;Ejercicio 2.2
+;; ===========================================
+;; Representación de puntos
+(define (make-point x y)
+  (cons x y))
+
+(define (x-point p)
+  (car p))
+
+(define (y-point p)
+  (cdr p))
+
+;; =========================================
+;; Representación de segmentos
+(define (make-segment start end)
+  (cons start end))
+
+(define (start-segment seg)
+  (car seg))
+
+(define (end-segment seg)
+  (cdr seg))
+
+;; ============================================
+;; Calcular el punto medio del segmento
+(define (midpoint-segment seg)
+  (let* ((start (start-segment seg))
+         (end (end-segment seg))
+         (mx (/ (+ (x-point start) (x-point end)) 2))
+         (my (/ (+ (y-point start) (y-point end)) 2)))
+    (make-point mx my)))
+
+;; ============================================
+;; Imprimir un punto
+(define (print-point p)
+  (newline)
+  (display "(")
+  (display (x-point p))
+  (display ", ")
+  (display (y-point p))
+  (display ")"))
+
+;; =========================
+;; Pruebas
+(define p1 (make-point 1 2))
+(define p2 (make-point 5 6))
+(define seg (make-segment p1 p2))
+
+(displayln "Punto inicial del segmento")
+(print-point (start-segment seg))
+
+(displayln "\nPunto final del segmento")
+(print-point (end-segment seg))
+
+(displayln "\nPunto medio del segmento")
+(print-point (midpoint-segment seg))

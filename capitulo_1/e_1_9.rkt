@@ -31,12 +31,12 @@
 
 ;With this procedure (plus-rec 4 5) would be:
 ;(plus-rec 4 5)
-;→ (inc (plus-rec 3 5))
-;→ (inc (inc (plus-rec 2 5)))
-;→ (inc (inc (inc (plus-rec 1 5))))
-;→ (inc (inc (inc (inc (plus-rec 0 5)))))
-;→ (inc (inc (inc (inc 5))))
-;→ 9
+;(inc (plus-rec 3 5))
+;(inc (inc (plus-rec 2 5)))
+;(inc (inc (inc (plus-rec 1 5))))
+;(inc (inc (inc (inc (plus-rec 0 5)))))
+;(inc (inc (inc (inc 5))))
+; 9
 
 ;The second procedure is iterative. Each call is substituted by a different call, but
 ;no calls have to be saved in the stack, there is simply a substitution, no operations
@@ -44,8 +44,8 @@
 
 ;With this procedure (plus-iter 4 5) would be
 ;(plus-iter 4 5)
-;→ (plus-iter 3 6)
-;→ (plus-iter 2 7)
-;→ (plus-iter 1 8)
-;→ (plus-iter 0 9)
-;→ 9
+;(plus-iter 3 6)
+;(plus-iter 2 7)
+;(plus-iter 1 8)
+;(plus-iter 0 9)
+; 9

@@ -40,6 +40,15 @@
         ((empieza-con-? (symbol->string (car pattern))); no es una lista y pregunta por algo, acumulo la respuesta y sigo
          (bind-aux (cdr pattern) (cdr data) (cons (list (devuelve-la-pregunta (car pattern)) (car data)) result)))
         (else (bind-aux (cdr pattern) (cdr data) result)))) ; No pregunta por nada, paso de esa información
-         
+
+; PRUEBAS
+(bind '(job ?name ?job) record)
+;  --> '((name (Hacker Alyssa P)) (job (computer programmer)))
+
+(bind '(?type ?name (?what programmer)) record)
+; -->  '((type job) (name (Hacker Alyssa P)) (what computer))
+
+(bind '(job ?what) record)
+; --> false (doesn't match)
   
   

@@ -5,5 +5,7 @@
 *.scm~
 *.scm#*
 .#*.scm
-*.bak
 *~
+*pycache*
+*pyc
+*undo-tree*

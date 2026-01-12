@@ -1,0 +1,42 @@
+#lang racket
+
+;; Procedimiento show del ejercicio
+(define (show x)
+  (display-line x)
+  x)
+
+;; Definición del stream x
+(define x
+  (stream-map
+   show
+   (stream-enumerate-interval 0 10)))
+
+;; ¿Qué imprime el intérprete?
+;;
+;; (stream-ref x 5)
+;; --- Mis comentarios ---
+;; Cuando pido el elemento 5, debido a la evaluación perezosa,
+;; el stream se va generando desde el 0 hasta el 5.
+;; Cada vez que 'show' recibe un valor, lo imprime.
+;; Por eso se muestran:
+;; 0
+;; 1
+;; 2
+;; 3
+;; 4
+;; 5
+;; Luego, stream-ref devuelve 5 (pero ese valor no se imprime
+;; automáticamente a menos que lo evalúe explícitamente en REPL).
+
+(stream-ref x 5)
+
+;; (stream-ref x 7)
+;; --- Mis comentarios ---
+;; Ahora los elementos 0–5 ya fueron generados y memorizados
+;; (memoization), así que NO se vuelven a imprimir.
+;; El stream continúa desde el 6 hasta el 7:
+;; 6
+;; 7
+;; Y después devuelve 7 como resultado de la consulta.
+
+(stream-ref x 7)

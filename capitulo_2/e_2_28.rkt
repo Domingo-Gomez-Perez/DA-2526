@@ -1,25 +1,30 @@
 #lang racket
 
-;; Procedimiento fringe:
-;; Recorre un árbol (listas anidadas) y devuelve todas sus hojas
-;; en orden de izquierda a derecha.
 
-(define (fringe tree)
-  (cond
-    ;; Caso 1: si el árbol está vacío → lista vacía
-    [(null? tree) '()]
-    ;; Caso 2: si es un átomo (no es una lista) → lo envolvemos en lista
-    [(not (pair? tree)) (list tree)]
-    ;; Caso 3: si es una lista → concatenamos fringe de car y fringe de cdr
-    [else (append (fringe (car tree))
-                  (fringe (cdr tree)))]))
+; Ejercicio 2.25 – 
+;; ==============================================
+;;Realizamos combinaciones de car y cdr para obtener 7
 
-;; Ejemplo de árbol
-(define x (list (list 1 2) (list 3 4)))
 
-;; Pruebas
-(fringe x)
-; => '(1 2 3 4)
+; 1) Lista: (1 3 (5 7) 9)
+(define lista1 '(1 3 (5 7) 9))
 
-(fringe (list x x))
-; => '(1 2 3 4 1 2 3 4)
+;; Prueba 1
+;; ============
+(displayln (cadr (caddr lista1))) ; → 7
+
+; 2) Lista: ((7))
+(define lista2 '((7)))
+
+;; Prueba 2
+;; =====================================
+(displayln (caar lista2)) ; → 7
+
+
+
+; 3) Lista: (1 (2 (3 (4 (5 (6 7))))))
+(define lista3 '(1 (2 (3 (4 (5 (6 7)))))))
+
+;; Prueba 3
+;; =========================
+(displayln (cadr (cadr (cadr (cadr (cadr (cadr lista3))))))) ; → 7

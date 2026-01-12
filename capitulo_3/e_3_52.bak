@@ -1,0 +1,86 @@
+#lang racket
+
+;; Defino sum inicializado a 0
+(define sum 0)
+
+;; accum recibe un número, lo añade a sum y devuelve el nuevo valor
+(define (accum x)
+  (set! sum (+ x sum))
+  sum)
+
+;; seq es un stream donde a cada número del 1 al 20
+;; se le aplica accum. Eso significa que cada vez que el stream
+;; genera un valor, sum aumenta.
+(define seq
+  (stream-map
+   accum
+   (stream-enumerate-interval 1 20)))
+
+;; y es un filtro sobre seq que deja solo los pares
+(define y (stream-filter even? seq))
+
+;; z es un filtro sobre seq que deja los múltiplos de 5
+(define z
+  (stream-filter
+   (lambda (x) (= (remainder x 5) 0))
+   seq))
+
+;; Pregunta 1:
+;; ¿Cuál es el valor de sum después de evaluar (stream-ref y 7)?
+;;
+;; Para obtener y₇, el stream tiene que generar los primeros 8 valores pares
+;; producidos por seq (ya que la indexación empieza en 0).
+;;
+;; seq genera acumulaciones:
+;; valor del stream:   1  3  6 10 15 21 28 36 45 ...
+;; sum evoluciona así: 1  3  6 10 15 21 28 36 45 ...
+;;
+;; Los pares de seq (stream y) son:
+;; 6 10 21? (no) 28 36 ...   → correctos: 6,10,28,36,...
+;;
+;; Para llegar al 8º par, seq necesariamente genera todos los valores
+;; hasta por lo menos 36.
+;;
+;; Por lo tanto, sum termina en 36.
+;;
+;; (stream-ref y 7) evalúa y devuelve 36, pero no lo imprime automáticamente.
+(stream-ref y 7)
+
+;; Comentario final:
+;; Después de esta línea, el valor de sum es 36.
+
+;; Pregunta 2:
+;; ¿Qué imprime el intérprete al evaluar (display-stream z)?
+;;
+;; Como seq ya tiene evaluados los valores hasta 36 (por culpa de y),
+;; esos valores ya están MEMORIZADOS y no se vuelven a ejecutar.
+;;
+;; z filtra los múltiplos de 5: 5, 15, 30, 45...
+;;
+;; Los valores ≤ 36 ya están memorizados, así que display-stream solo
+;; fuerza los que no existan todavía (45, 50...).
+;;
+;; Imprime:
+;; 5
+;; 15
+;; 30
+;; 45
+;;
+;; (45 provoca que seq continúe y sum aumente)
+(display-stream z)
+
+;; Pregunta 3:
+;; ¿Cambiaría la salida si delay no memorizara los resultados?
+;;
+;; Sí, cambiaría totalmente.
+;; Sin memo-proc, accum se ejecutaría cada vez que un elemento del stream
+;; fuese usado, incluso si ya se había calculado antes.
+;;
+;; Eso provocaría que sum creciera MUCHÍSIMO más,
+;; porque las mismas posiciones del stream se reevaluarían repetidamente.
+;;
+;; Con memo-proc:
+;;   cada valor del stream se calcula solo UNA VEZ.
+;; Sin memo-proc:
+;;   cada acceso vuelve a ejecutar accum, sum cambia y las salidas impresas serían distintas.
+

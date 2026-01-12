@@ -1,0 +1,23 @@
+#lang racket
+
+;Creo una función que envuelva otra y lleve cuenta de cuántas veces ha sido llamada.
+
+(define (make-monitored f)
+  (let ((count 0))
+    (lambda (x)
+      (cond
+        ((eq? x 'how-many-calls?) count)
+        ((eq? x 'reset-count) (set! count 0) count)
+        (else
+          (set! count (+ count 1))
+          (f x))))))
+
+
+(define s (make-monitored sqrt))
+
+(s 100)                
+(s 'how-many-calls?)   
+(s 25)               
+(s 'how-many-calls?)  
+(s 'reset-count)       
+(s 'how-many-calls?)  
